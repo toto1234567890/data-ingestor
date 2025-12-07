@@ -6,9 +6,9 @@ import (
 	"sync"
 	"time"
 
-	"trading-system/src/logger"
-	"trading-system/src/models"
-	"trading-system/src/utils"
+	"data-ingestor/src/logger"
+	"data-ingestor/src/models"
+	"data-ingestor/src/utils"
 
 	"github.com/gorilla/websocket"
 )

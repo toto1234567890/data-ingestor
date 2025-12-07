@@ -1,4 +1,4 @@
-module trading-system
+module data-ingestor
 
 go 1.25.4
 

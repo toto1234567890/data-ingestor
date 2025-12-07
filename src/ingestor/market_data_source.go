@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"trading-system/src/interfaces"
-	"trading-system/src/logger"
-	"trading-system/src/models"
+	"data-ingestor/src/interfaces"
+	"data-ingestor/src/logger"
+	"data-ingestor/src/models"
 )
 
 // -----------------------------------------------------------------------------
@@ -109,3 +109,4 @@ func (s *MarketDataSource) GetStatus() *models.MDataSourceStatus {
 		Symbols:       s.Broker.GetSymbols(),  // <-- From IBroker
 	}
 }
+

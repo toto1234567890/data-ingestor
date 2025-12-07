@@ -5,9 +5,9 @@ import (
 	"sync"
 	"time"
 
-	"trading-system/src/interfaces"
-	"trading-system/src/logger"
-	"trading-system/src/models"
+	"data-ingestor/src/interfaces"
+	"data-ingestor/src/logger"
+	"data-ingestor/src/models"
 
 	"github.com/nats-io/nats.go"
 )

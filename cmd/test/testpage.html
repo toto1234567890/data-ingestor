@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading System Control Panel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.8;
+            font-size: 1.1em;
+        }
+
+        .content {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .panel {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            border: 1px solid #e9ecef;
+        }
+
+        .panel h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+            font-family: monospace;
+        }
+
+        .btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.3s;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .btn:hover {
+            background: #2980b9;
+        }
+
+        .btn-success {
+            background: #27ae60;
+        }
+
+        .btn-success:hover {
+            background: #219a52;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .btn-warning {
+            background: #f39c12;
+        }
+
+        .btn-warning:hover {
+            background: #d35400;
+        }
+
+        .btn-info {
+            background: #17a2b8;
+        }
+
+        .btn-info:hover {
+            background: #138496;
+        }
+
+        .response {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background: #f8f9fa;
+            border-left: 4px solid #3498db;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+            font-size: 12px;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-online {
+            background: #27ae60;
+        }
+
+        .status-offline {
+            background: #e74c3c;
+        }
+
+        .status-available {
+            background: #f39c12;
+        }
+
+        .broker-list {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+
+        .broker-item {
+            padding: 10px;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            background: white;
+            font-size: 12px;
+        }
+
+        .broker-item.running {
+            border-left: 4px solid #27ae60;
+        }
+
+        .broker-item.available {
+            border-left: 4px solid #f39c12;
+        }
+
+        .health-status {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #e9ecef;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+
+        .tab-buttons {
+            display: flex;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .tab-button {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab-button.active {
+            border-bottom-color: #3498db;
+            color: #3498db;
+            font-weight: 600;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Trading System Control Panel</h1>
+            <p>REST API Gateway to gRPC Control Service</p>
+        </div>
+
+        <div class="content">
+            <!-- Broker Management Panel -->
+            <div class="panel">
+                <h2>🚀 Broker Management</h2>
+
+                <div class="form-group">
+                    <label for="brokerSelect">Select Broker:</label>
+                    <select id="brokerSelect" onchange="onBrokerSelectChange()">
+                        <option value="all">All brokers</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="sourceName">Source Name:</label>
+                    <input type="text" id="sourceName" placeholder="e.g., binance, finnhub" value="">
+                </div>
+
+                <div class="form-group">
+                    <label for="sourceType">Source Type:</label>
+                    <input type="text" id="sourceType" placeholder="e.g., websocket, tcp, rest" value="" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="symbols">Symbols:</label>
+                    <input type="text" id="symbols" placeholder="e.g., BTCUSDT,ETHUSDT,ADAUSDT" value="" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="endpoint">Endpoint:</label>
+                    <input type="text" id="endpoint" placeholder="e.g., wss://stream.binance.com:9443/ws" value=""
+                        readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="apiKey">API Key (optional):</label>
+                    <input type="text" id="apiKey" placeholder="API key if required" value="">
+                </div>
+
+                <div>
+                    <button class="btn btn-success" onclick="startBroker()">Start Broker</button>
+                    <button class="btn btn-danger" onclick="stopBroker()">Stop Broker</button>
+                    <button class="btn btn-info" onclick="getBrokerStatus()">Get Status</button>
+                </div>
+
+                <div class="response" id="brokerResponse"></div>
+            </div>
+
+            <!-- Broker Listing Panel -->
+            <div class="panel">
+                <h2>📈 Broker Discovery</h2>
+
+                <div class="tab-buttons">
+                    <button class="tab-button active" onclick="switchTab('running')">Running Brokers</button>
+                    <button class="tab-button" onclick="switchTab('available')">Available Brokers</button>
+                    <button class="tab-button" onclick="switchTab('all')">All Brokers</button>
+                </div>
+
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-number" id="runningCount">0</div>
+                        <div class="stat-label">Running</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="availableCount">0</div>
+                        <div class="stat-label">Available</div>
+                    </div>
+                </div>
+
+                <div>
+                    <button class="btn" onclick="refreshBrokerList()">Refresh List</button>
+                </div>
+
+                <div class="broker-list" id="brokerList">
+                    <div class="broker-item">No brokers loaded. Click refresh.</div>
+                </div>
+
+                <div class="response" id="brokerListResponse"></div>
+            </div>
+
+            <!-- Symbol Management Panel -->
+            <div class="panel">
+                <h2>🎯 Symbol Management</h2>
+
+                <div class="form-group">
+                    <label for="symbolBrokerId">Broker ID:</label>
+                    <select id="symbolBrokerId" onchange="onSymbolBrokerIdChange()">
+                        <option value="all">All running brokers</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="updateSymbols">Symbols to Add/Remove:</label>
+                    <input type="text" id="updateSymbols" placeholder="e.g., SOLUSDT,DOGEUSDT" value="">
+                </div>
+
+                <div>
+                    <button class="btn btn-success" onclick="addSymbols()">Add Symbols</button>
+                    <button class="btn btn-danger" onclick="removeSymbols()">Remove Symbols</button>
+                </div>
+
+                <div class="response" id="symbolResponse"></div>
+            </div>
+
+            <!-- System Status Panel -->
+            <div class="panel">
+                <h2>🔍 System Status</h2>
+
+                <div class="health-status">
+                    <span class="status-indicator" id="healthIndicator"></span>
+                    <span id="healthStatus">Checking system health...</span>
+                </div>
+
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-number" id="healthRunning">0</div>
+                        <div class="stat-label">Running Brokers</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="healthSymbols">0</div>
+                        <div class="stat-label">Running Symbols</div>
+                    </div>
+                </div>
+
+                <div>
+                    <button class="btn" onclick="checkHealth()">Check Health</button>
+                </div>
+
+                <div class="response" id="statusResponse"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const REST_BASE = '/rest';
+        let currentTab = 'running';
+
+        // Tab management
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            refreshBrokerList();
+        }
+
+        // Display response in any panel
+        function displayResponse(elementId, data) {
+            const element = document.getElementById(elementId);
+            element.textContent = typeof data === 'string' ? data : JSON.stringify(data, null, 2);
+            element.style.display = 'block';
+        }
+
+        // Update broker statistics
+        function updateStats(runningCount, availableCount, runningSymbolsCount) {
+            document.getElementById('runningCount').textContent = runningCount;
+            document.getElementById('availableCount').textContent = availableCount;
+            document.getElementById('healthRunning').textContent = runningCount;
+            document.getElementById('healthSymbols').textContent = runningSymbolsCount;
+        }
+
+        // Broker management functions
+        async function startBroker() {
+            const sourceName = document.getElementById('sourceName').value;
+            const sourceType = document.getElementById('sourceType').value;
+            const symbols = document.getElementById('symbols').value.split(',').map(s => s.trim()).filter(s => s);
+            const endpoint = document.getElementById('endpoint').value;
+            const apiKey = document.getElementById('apiKey').value;
+
+            const response = await fetch(`${REST_BASE}/brokers/start`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    source_name: sourceName,
+                    source_type: sourceType,
+                    symbols: symbols,
+                    endpoint: endpoint,
+                    api_key: apiKey
+                })
+            });
+
+            const data = await response.json();
+            displayResponse('brokerResponse', data);
+            refreshBrokerList();
+        }
+
+        async function stopBroker() {
+            const sourceName = document.getElementById('sourceName').value;
+
+            const response = await fetch(`${REST_BASE}/brokers/stop`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ broker_id: sourceName })
+            });
+
+            const data = await response.json();
+            displayResponse('brokerResponse', data);
+            refreshBrokerList();
+        }
+
+        async function getBrokerStatus() {
+            const sourceName = document.getElementById('sourceName').value;
+
+            const response = await fetch(`${REST_BASE}/brokers/status`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ broker_id: sourceName })
+            });
+
+            const data = await response.json();
+            displayResponse('brokerResponse', data);
+        }
+
+        // Broker listing functions
+        async function refreshBrokerList() {
+            const response = await fetch(`${REST_BASE}/brokers/list?include_available=true`);
+            const data = await response.json();
+            displayResponse('brokerListResponse', data);
+
+            if (data.success && data.data) {
+                const runningBrokers = data.data.running_brokers || [];
+                // In the current backend implementation, available_brokers contains ALL brokers when include_available=true
+                const allBrokers = data.data.available_brokers || [];
+
+                // Calculate stats
+                const runningCount = runningBrokers.length;
+                // Total count is the length of allBrokers since it includes everyone
+                const totalCount = allBrokers.length;
+                const runningSymbolsCount = runningBrokers.reduce((acc, broker) => acc + (broker.symbols ? broker.symbols.length : 0), 0);
+
+                updateStats(runningCount, totalCount, runningSymbolsCount);
+
+                updateBrokerList(runningBrokers, allBrokers);
+            }
+        }
+
+        function updateBrokerList(runningBrokers, allBrokers) {
+            const brokerList = document.getElementById('brokerList');
+            let brokers = [];
+
+            if (currentTab === 'running') {
+                brokers = runningBrokers;
+            } else if (currentTab === 'available') {
+                // Show only stopped brokers (Available - Running)
+                brokers = allBrokers.filter(b => !b.running);
+            } else if (currentTab === 'all') {
+                brokers = allBrokers;
+            }
+
+            if (brokers.length === 0) {
+                brokerList.innerHTML = '<div class="broker-item">No brokers found</div>';
+                return;
+            }
+
+            brokerList.innerHTML = brokers.map(broker => `
+                <div class="broker-item ${broker.running ? 'running' : 'available'}">
+                    <strong>${broker.broker_name}</strong> (${broker.broker_type})<br>
+                    <span class="status-indicator ${broker.running ? 'status-online' : 'status-available'}"></span>
+                    ${broker.running ? 'RUNNING' : 'STOPPED'}
+                    ${broker.symbols && broker.symbols.length > 0 ? `• ${broker.symbols.length} symbols` : ''}<br>
+                    ${broker.endpoint ? `Endpoint: ${broker.endpoint}` : ''}
+                    ${broker.status ? `Status: ${broker.status}` : ''}
+                </div>
+            `).join('');
+        }
+
+        // Symbol Management Functions
+        async function addSymbols() {
+            const brokerId = document.getElementById('symbolBrokerId').value;
+            const symbols = document.getElementById('updateSymbols').value.split(',').map(s => s.trim()).filter(s => s);
+
+            if (brokerId === 'all') {
+                // Get all running brokers from the dropdown options
+                const select = document.getElementById('symbolBrokerId');
+                const brokers = Array.from(select.options)
+                    .filter(opt => opt.value !== 'all')
+                    .map(opt => opt.value);
+
+                let results = [];
+                for (const id of brokers) {
+                    try {
+                        const response = await fetch(`${REST_BASE}/brokers/symbols/add`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ broker_id: id, symbols })
+                        });
+                        const data = await response.json();
+                        results.push(`${id}: ${data.message || (data.success ? 'Success' : 'Failed')}`);
+                    } catch (e) {
+                        results.push(`${id}: Error - ${e.message}`);
+                    }
+                }
+                displayResponse('symbolResponse', results.join('\n'));
+            } else {
+                const response = await fetch(`${REST_BASE}/brokers/symbols/add`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ broker_id: brokerId, symbols })
+                });
+                const data = await response.json();
+                displayResponse('symbolResponse', data);
+            }
+        }
+
+        async function removeSymbols() {
+            const brokerId = document.getElementById('symbolBrokerId').value;
+            const symbols = document.getElementById('updateSymbols').value.split(',').map(s => s.trim()).filter(s => s);
+
+            if (brokerId === 'all') {
+                // Get all running brokers from the dropdown options
+                const select = document.getElementById('symbolBrokerId');
+                const brokers = Array.from(select.options)
+                    .filter(opt => opt.value !== 'all')
+                    .map(opt => opt.value);
+
+                let results = [];
+                for (const id of brokers) {
+                    try {
+                        const response = await fetch(`${REST_BASE}/brokers/symbols/remove`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ broker_id: id, symbols })
+                        });
+                        const data = await response.json();
+                        results.push(`${id}: ${data.message || (data.success ? 'Success' : 'Failed')}`);
+                    } catch (e) {
+                        results.push(`${id}: Error - ${e.message}`);
+                    }
+                }
+                displayResponse('symbolResponse', results.join('\n'));
+            } else {
+                const response = await fetch(`${REST_BASE}/brokers/symbols/remove`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ broker_id: brokerId, symbols })
+                });
+                const data = await response.json();
+                displayResponse('symbolResponse', data);
+            }
+        }
+
+        // System status functions
+        async function checkHealth() {
+            const response = await fetch(`${REST_BASE}/health`);
+            const data = await response.json();
+            displayResponse('statusResponse', data);
+
+            // Update health indicator
+            const indicator = document.getElementById('healthIndicator');
+            const status = document.getElementById('healthStatus');
+
+            if (data.success && data.data.healthy) {
+                indicator.className = 'status-indicator status-online';
+                status.textContent = `Healthy • Running: ${data.data.running_brokers || 0}, Available: ${data.data.available_brokers || 0}`;
+            } else {
+                indicator.className = 'status-indicator status-offline';
+                status.textContent = 'Unhealthy • Check system status';
+            }
+        }
+
+        // Broker Dropdown Management
+        async function populateBrokerDropdown() {
+            const response = await fetch(`${REST_BASE}/brokers/list?include_available=true`);
+            const data = await response.json();
+
+            if (data.success && data.data) {
+                const select = document.getElementById('brokerSelect');
+                const currentValue = select.value;
+
+                // Keep "All brokers" option
+                select.innerHTML = '<option value="all">All brokers</option>';
+
+                const allBrokers = [
+                    ...(data.data.running_brokers || []),
+                    ...(data.data.available_brokers || [])
+                ];
+
+                // Remove duplicates based on broker_name
+                const uniqueBrokers = Array.from(new Map(allBrokers.map(item => [item.broker_name, item])).values());
+
+                uniqueBrokers.forEach(broker => {
+                    const option = document.createElement('option');
+                    option.value = broker.broker_name;
+                    option.text = `${broker.broker_name} (${broker.running ? 'Running' : 'Stopped'})`;
+                    // Store broker data in dataset for easy access
+                    option.dataset.broker = JSON.stringify(broker);
+                    select.appendChild(option);
+                });
+
+                // Restore selection if possible
+                if (currentValue && select.querySelector(`option[value="${currentValue}"]`)) {
+                    select.value = currentValue;
+                }
+            }
+        }
+
+        function onBrokerSelectChange() {
+            const select = document.getElementById('brokerSelect');
+            const selectedOption = select.options[select.selectedIndex];
+
+            if (select.value === 'all') {
+                // Clear fields or set defaults
+                document.getElementById('sourceName').value = '';
+                document.getElementById('sourceType').value = '';
+                document.getElementById('symbols').value = '';
+                document.getElementById('endpoint').value = '';
+                document.getElementById('apiKey').value = '';
+            } else {
+                // Populate fields from dataset
+                try {
+                    const broker = JSON.parse(selectedOption.dataset.broker);
+                    document.getElementById('sourceName').value = broker.broker_name || '';
+                    document.getElementById('sourceType').value = broker.broker_type || '';
+                    document.getElementById('symbols').value = (broker.symbols || []).join(',');
+                    document.getElementById('endpoint').value = broker.endpoint || '';
+                    // API key is usually not returned for security, but if it were:
+                    // document.getElementById('apiKey').value = broker.api_key || '';
+                } catch (e) {
+                    console.error("Error parsing broker data", e);
+                }
+            }
+        }
+
+        // Symbol Broker Dropdown Management
+        async function populateSymbolBrokerDropdown() {
+            const response = await fetch(`${REST_BASE}/brokers/list?include_available=true`);
+            const data = await response.json();
+
+            if (data.success && data.data) {
+                const select = document.getElementById('symbolBrokerId');
+                const currentValue = select.value;
+
+                // Keep "All running brokers" option
+                select.innerHTML = '<option value="all">All running brokers</option>';
+
+                // Filter for running brokers only
+                const runningBrokers = data.data.running_brokers || [];
+
+                // Remove duplicates based on broker_name
+                const uniqueBrokers = Array.from(new Map(runningBrokers.map(item => [item.broker_name, item])).values());
+
+                uniqueBrokers.forEach(broker => {
+                    const option = document.createElement('option');
+                    option.value = broker.broker_name;
+                    option.text = `${broker.broker_name} (${broker.symbols ? broker.symbols.length : 0} symbols)`;
+                    // Store broker data in dataset
+                    option.dataset.broker = JSON.stringify(broker);
+                    select.appendChild(option);
+                });
+
+                // Restore selection if possible
+                if (currentValue && select.querySelector(`option[value="${currentValue}"]`)) {
+                    select.value = currentValue;
+                }
+            }
+        }
+
+        function onSymbolBrokerIdChange() {
+            const select = document.getElementById('symbolBrokerId');
+            const updateSymbolsInput = document.getElementById('updateSymbols');
+
+            if (select.value === 'all') {
+                // Aggregate symbols from all running brokers
+                let allSymbols = new Set();
+                Array.from(select.options).forEach(option => {
+                    if (option.value !== 'all' && option.dataset.broker) {
+                        try {
+                            const broker = JSON.parse(option.dataset.broker);
+                            if (broker.symbols) {
+                                broker.symbols.forEach(s => allSymbols.add(s));
+                            }
+                        } catch (e) {
+                            console.error("Error parsing broker data", e);
+                        }
+                    }
+                });
+                updateSymbolsInput.value = Array.from(allSymbols).join(',');
+            } else {
+                // Populate with selected broker's symbols
+                const selectedOption = select.options[select.selectedIndex];
+                try {
+                    const broker = JSON.parse(selectedOption.dataset.broker);
+                    updateSymbolsInput.value = (broker.symbols || []).join(',');
+                } catch (e) {
+                    console.error("Error parsing broker data", e);
+                    updateSymbolsInput.value = '';
+                }
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function () {
+            checkHealth();
+            refreshBrokerList();
+            populateBrokerDropdown();
+            populateSymbolBrokerDropdown();
+
+            // Auto-refresh every 30 seconds
+            setInterval(() => {
+                checkHealth();
+                refreshBrokerList();
+                populateBrokerDropdown();
+                populateSymbolBrokerDropdown();
+            }, 30000);
+        });
+    </script>
+</body>
+
+</html>

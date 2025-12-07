@@ -3,4 +3,5 @@
 2. create a postgres connector to retrieve ingestor pre-configured strategies 
 3. create models.configIngestor and models.configDataSource for postgres connector
 4. add/implement new brokers data source
-5. regarding brokers data source, do I need to implement a new transport layer ?
+5. add a generic tcp receiver data source -> create the TCP transport layer
+ 

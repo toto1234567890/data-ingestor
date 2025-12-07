@@ -6,12 +6,12 @@ import (
 	"strings"
 	"time"
 
-	"trading-system/src/config"
-	"trading-system/src/interfaces"
-	"trading-system/src/logger"
-	"trading-system/src/models"
-	"trading-system/src/serializers"
-	"trading-system/src/utils"
+	"data-ingestor/src/config"
+	"data-ingestor/src/interfaces"
+	"data-ingestor/src/logger"
+	"data-ingestor/src/models"
+	"data-ingestor/src/serializers"
+	"data-ingestor/src/utils"
 )
 
 // -----------------------------------------------------------------------------

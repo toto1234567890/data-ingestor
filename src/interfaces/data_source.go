@@ -1,6 +1,6 @@
 package interfaces
 
-import "trading-system/src/models"
+import "data-ingestor/src/models"
 
 // -----------------------------------------------------------------------------
 

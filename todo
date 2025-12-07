@@ -1,6 +1,6 @@
 # TODO
 1. do I need to check for double subscription message on broker side ?
-2. extract best ask/bid from order book update message, instead of multiple subscription (some brokers don't provide QUOTE requests)
+2. extract best ask/bid from order book update message, instead of multiple subscription (some broker doesn't provide QUOTE requests)
 3. create a postgres connector to retrieve ingestor pre-configured strategies 
 4. create models.configIngestor and models.configDataSource for postgres connector
 5. add/implement new brokers data source

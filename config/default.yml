@@ -1,0 +1,62 @@
+# --- INGESTOR CORE SETTINGS ---
+name: "MarketDataIngestor"
+host: "127.0.0.1"
+port: 8080
+log_level: "INFO"
+grpc_host: "localhost"
+grpc_port: 50051
+
+# --- NATS CONNECTION & JETSTREAM CONFIGURATION ---
+nats:
+  # Connection Details
+  servers: 
+    - "nats://127.0.0.1:4222"
+    # You can list multiple servers for redundancy:
+    # - "nats://nats.staging.example.com:4222"
+  
+  client_id: "NATSIngestor" # Unique ID for this client instance
+  cluster_id: "" # Only used for legacy NATS Streaming (often left empty)
+  subject: "marketdata.raw" # Default subject to publish to
+  subject_prefix: "marketdata" # Base prefix for all subjects (e.g., marketdata.binance.btcusdt)
+
+  # Reliability and Timeouts (Use Go time.Duration format)
+  connect_timeout: "5s"
+  reconnect_wait: "1s"
+  max_reconnects: 10
+  flush_timeout: "5s" # Max time to wait for published messages to be acknowledged
+
+  # JetStream Settings (Requires JetStream enabled on the NATS server)
+  jetstream:
+    enabled: true
+    stream_name: "MARKET_DATA" # The name of the stream to publish to
+
+    # Stream Configuration (How the data is stored)
+    subjects: 
+      - "marketdata.>" # Subjects the stream tracks (e.g., all subjects starting with marketdata.)
+    retention: "limits" # Limits-based retention is typical for trading data
+    storage: "file" # Store data on disk (more durable than 'memory')
+    replicas: 1 # Number of copies of the stream data (1 for local, 3 for cluster)
+
+    # Stream Limits
+    max_age: "72h" # Keep messages for 72 hours (3 days)
+    max_msgs: -1 # Unlimited number of messages
+    max_bytes: 10737418240 # 10GB limit (10 * 1024 * 1024 * 1024 bytes)
+    max_msg_size: 1048576 # 1MB max size per message (1024 * 1024 bytes)
+
+    # Optional: Consumer Configuration (often defined externally, but included for completeness)
+    durable_consumer: "DATA_INGEST_CONSUMER" 
+    ack_wait: "30s" # Time to wait for an acknowledgment from a consumer
+    
+
+# --- DATA SOURCES CONFIGURATION ---
+data_sources:
+  - name: "binance"
+    type: "websocket"
+    endpoint: "wss://stream.binance.com:9443/ws"
+    symbols: 
+    timeframe : false
+    connection_config:
+      reconnect_attempts: 10
+      reconnect_delay: "5s"
+
+

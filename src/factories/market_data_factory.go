@@ -3,12 +3,12 @@ package factories
 import (
 	"fmt"
 
-	"trading-system/src/brokers"
-	"trading-system/src/config"
-	"trading-system/src/interfaces"
-	"trading-system/src/logger"
-	"trading-system/src/models"
-	"trading-system/src/transports"
+	"data-ingestor/src/brokers"
+	"data-ingestor/src/config"
+	"data-ingestor/src/interfaces"
+	"data-ingestor/src/logger"
+	"data-ingestor/src/models"
+	"data-ingestor/src/transports"
 )
 
 // -----------------------------------------------------------------------------

@@ -5,7 +5,7 @@ import (
 	"encoding/gob"
 	"fmt"
 
-	"trading-system/src/interfaces"
+	"data-ingestor/src/interfaces"
 )
 
 // -----------------------------------------------------------------------------

@@ -1,9 +1,9 @@
 package interfaces
 
 import (
-	"trading-system/src/config"
-	"trading-system/src/logger"
-	"trading-system/src/models"
+	"data-ingestor/src/config"
+	"data-ingestor/src/logger"
+	"data-ingestor/src/models"
 )
 
 // -----------------------------------------------------------------------------

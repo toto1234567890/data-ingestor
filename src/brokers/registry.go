@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"sync"
 
-	"trading-system/src/interfaces"
+	"data-ingestor/src/interfaces"
 )
 
 // The global registry map. Key is the broker name (e.g., "binance"), value is the constructor function.

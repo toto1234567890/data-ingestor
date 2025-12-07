@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"trading-system/src/models"
+	"data-ingestor/src/models"
 
 	"gopkg.in/yaml.v3"
 )

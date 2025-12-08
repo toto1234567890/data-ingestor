@@ -472,12 +472,14 @@ bash
 *   More transport protocols (FIX, TCP, HTTP/2)
     
 *   Data aggregation and OHLCV generation
+
+*   Plug multiple realtime data analysis service to nats-server
     
 *   Database integration (TimescaleDB, ClickHouse)
     
 *   Prometheus metrics exporter + grafana
     
-*   Docker containerization maybe later
+
     
     
 

@@ -53,7 +53,7 @@ A production-grade, high-performance market data ingestion system written in Go.
 ### 📈 **Real-Time Monitoring**
 - **Live Status Dashboard**: Web interface showing all active connections
 - **Performance Metrics**: Connection stats and message throughput
-- **Error Tracking**: Real-time error reporting and alerting
+- **Error Tracking**: Real-time error logging
 - **Resource Monitoring**: Memory and goroutine usage tracking
 
 ## 🏗️ Architecture Overview
